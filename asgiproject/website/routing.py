@@ -1,12 +1,12 @@
+from django.urls import path
 from django.conf.urls import url
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, ChannelNameRouter, URLRouter
 
-from . import views
 from . import consumers
 
 views_router = URLRouter([
-    url(r"^$", views.BasicHttpConsumer)
+    path('testhome/', consumers.BasicHttpConsumer)
 ])
 
 websocket_router = AuthMiddlewareStack(
