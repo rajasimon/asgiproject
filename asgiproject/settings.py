@@ -25,7 +25,7 @@ SECRET_KEY = 'xxqndcdx%$+()e6s6felw7)ux4et8=2qts%u8l^1$f&m)*6d@9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "asgiproject.herokuapp.com"]
 
 
 # Application definition
