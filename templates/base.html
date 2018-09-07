@@ -5,19 +5,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello ASGI Project!</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+  <title>ASGI Project!</title>
+  <link rel="stylesheet" href="{% static 'bulma.min.css' %}">
 </head>
 <body>
   <section class="hero is-white is-fullheight">
     <!-- Hero content: will be in the middle -->
     <div class="hero-body">
       <div class="container has-text-centered">
-        <h1 class="title">
-          ASGI Project
+        <h1 class="title has-text-primary" id="showNumber">
+          0
         </h1>
         <h2 class="subtitle">
-          <p id="showNumber" class="has-text-primary"></p> sessions are connected right now.
+          sessions are connected right now.
         </h2>
         <a href="https://github.com/rajasimon/asgiproject" class="button is-black">Github</a>
       </div>
