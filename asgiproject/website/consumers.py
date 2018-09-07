@@ -5,6 +5,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.http import AsyncHttpConsumer
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
 
+from asgiproject.website.models import Counter
+
 
 class BasicHttpConsumer(AsyncHttpConsumer):
     async def handle(self, body):
@@ -46,24 +48,39 @@ class StreamConsumer(WebsocketConsumer):
 
 
     def disconnect(self, close_code):
-        pass
-
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
+        """User disconnected take necessary actions."""
+        # Decrease the user count from the system.
+        counter = Counter.objects.get(id=1)
+        counter.count = counter.count - 1
+        counter.save()
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'stream_message',
-                'message': message
+                'message': counter.count
             }
         )
+
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        print(self.channel_name)
+        if message == 'connected':
+            counter = Counter.objects.get(id=1)
+            counter.count = counter.count + 1
+            counter.save()
+
+            # Send message to room group
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'stream_message',
+                    'message': counter.count
+                }
+            )
 
     # Receive message from room_group
     def stream_message(self, event):

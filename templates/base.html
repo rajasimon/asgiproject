@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hello ASGI Project!</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-  <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 </head>
 <body>
   <section class="hero is-white is-fullheight">
@@ -18,7 +17,7 @@
           ASGI Project
         </h1>
         <h2 class="subtitle">
-          This number <p id="showNumber" class="has-text-primary"></p> comes from background job via websocket and changes every 5 seconds.
+          <p id="showNumber" class="has-text-primary"></p> sessions are connected right now.
         </h2>
         <a href="https://github.com/rajasimon/asgiproject" class="button is-black">Github</a>
       </div>
@@ -27,8 +26,17 @@
   <script src="{% static "channels/js/websocketbridge.js" %}"></script>
   <script>
     const webSocketBridge = new channels.WebSocketBridge();
+
     webSocketBridge.connect('/stream/');
+    
+    // Connected callback to server
+    webSocketBridge.socket.addEventListener('open', function() {
+      console.log("Connected to WebSocket");
+      webSocketBridge.send({message: 'connected'});
+    })
+
     webSocketBridge.listen(function(action, stream) {
+      console.log(action, stream)
       const msg = action.message
       
       // Get show number element
